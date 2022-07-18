@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import coaching.administrator.classes.Global.APIMessage;
 import coaching.administrator.classes.Global.Global;
 import coaching.administrator.classes.Person.ConfirmationToken;
@@ -34,6 +37,9 @@ public class AdminController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @PostMapping("/verify-admin")
     public APIMessage addAdmin(@RequestBody Map<String, Object> adminMap) {
@@ -110,15 +116,16 @@ public class AdminController {
             System.out.println("\033[31minside add admin\033[0m");
 
             // personService.savePerson(admin);
+            System.out.println("Admin id : " + admin.getPerson().getId());
             service.saveAdmin(admin);
 
+            return new APIMessage(true, "Information successfully submitted");
         } catch (Exception e) {
             service.deleteAdmin(admin.getPerson().getId());
             System.out.println("\033[31minside Exception in add admin\033[0m");
             e.printStackTrace();
-            return new APIMessage(false, "Something went wrong. Please try again");
         }
-        return null;
+        return new APIMessage(false, "Server error. Please try again");
     }
 
     @GetMapping("/get-admin-by-id/{id}")
@@ -147,27 +154,32 @@ public class AdminController {
         return service.updateAdmin(admin);
     }
 
-    @GetMapping("/authenticate-admin")
-    public APIMessage authenticateAdmin(@RequestBody Map<String, String> adminMap) {
-
+    @PostMapping("/authenticate-admin")
+    public ObjectNode authenticateAdmin(@RequestBody Map<String, String> adminMap) {
+        ObjectNode node = mapper.createObjectNode();
         String email = adminMap.get("email");
         String password = adminMap.get("password");
 
-        PasswordEncoder pEncoder = new PasswordEncoder();
-        String encodedPasssword = pEncoder.getEncodedPassword(password);
+        // PasswordEncoder pEncoder = new PasswordEncoder();
+        // String encodedPasssword = pEncoder.getEncodedPassword(password);
         Admin admin = service.getAdminByEmail(email);
-        if (admin == null) {
-            if (confirmationTokenRepository.findByEmail(email) != null)
-                return new APIMessage(false, "Check your inbox to verify account !");
-            else
-                return new APIMessage(false, "Please register first");
 
-        } else if (!encodedPasssword.equals(admin.getPerson().getPassword()))
-            return new APIMessage(false, "Please enter correct password !");
-        else if (encodedPasssword.equals(admin.getPerson().getPassword()))
-            return new APIMessage(false, "Login successful");
+        if (admin == null)
+            return node
+                    .put("success", false)
+                    .put("message", "User not found. Please, register first.");
+        else if (!password.equals(admin.getPerson().getPassword()))
+            return node
+                    .put("success", false)
+                    .put("message", "Password not match");
+        else if (password.equals(admin.getPerson().getPassword()))
+            return node
+                    .put("success", true)
+                    .put("message", "Login successful")
+                    .put("adminId", admin.getPerson().getId());
         else
-            return new APIMessage(false, "Something went wrong. Please try again");
+            return node
+                    .put("success", false)
+                    .put("message", "Server error. Try again.");
     }
-
 }
