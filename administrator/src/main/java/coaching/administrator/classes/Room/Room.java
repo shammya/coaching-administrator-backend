@@ -1,4 +1,6 @@
-package coaching.administrator.classes.ContactType;
+package coaching.administrator.classes.Room;
+
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,15 +13,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-// @Table(name = "contact_type")
-public class ContactType {
+@AllArgsConstructor
+@Data
+@Table(name = "room")
+public class Room implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private Integer studentCapacity;
 
 }

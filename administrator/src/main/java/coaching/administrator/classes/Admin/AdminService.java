@@ -64,8 +64,9 @@ public class AdminService {
     public Admin updateAdmin(Admin admin) {
 
         // personService.updatePerson(admin);
-        // Admin newAdmin = repository.findById(admin.getId()).orElse(null);
-        // return newAdmin;
+        // Admin oldAdmin = repository.findById(admin.getPerson_id()).orElse(null);
+        // oldadm
+
         return repository.save(admin);
     }
 
@@ -83,7 +84,7 @@ public class AdminService {
         else if (!password.equals(admin.getPerson().getPassword()))
             return node
                     .put("success", false)
-                    .put("message", "Password not match");
+                    .put("message", "Password does not match");
         else if (password.equals(admin.getPerson().getPassword()))
             return node
                     .put("success", true)
@@ -139,7 +140,7 @@ public class AdminService {
                 admin.setPerson(person);
                 saveAdmin(admin);
                 return node
-                        .put("success", false)
+                        .put("success", true)
                         .put("message", "Account verified successfully");
             } else {
                 return node
@@ -178,8 +179,8 @@ public class AdminService {
             emailService.sendEmail(mailMessage);
 
             return node
-                    .put("success", false)
-                    .put("message", "Registration successful");
+                    .put("success", true)
+                    .put("message", "Please verify your email");
 
         } catch (Exception e) {
             // service.deleteAdmin(unVerifiedAdmin.getId());
