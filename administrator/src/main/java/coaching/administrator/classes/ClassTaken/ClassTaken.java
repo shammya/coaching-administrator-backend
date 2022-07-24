@@ -1,4 +1,4 @@
-package coaching.administrator.classes.Subject;
+package coaching.administrator.classes.ClassTaken;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,12 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import coaching.administrator.classes.Coaching.Coaching;
+import coaching.administrator.classes.ClassTime.ClassTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,17 +24,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "subject")
-public class Subject implements Serializable {
+@Table(name = "class_taken")
+public class ClassTaken implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date openingDate;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "coaching_id", referencedColumnName = "id")
-    private Coaching coaching;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+
+
+    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "class_time_id", referencedColumnName = "id")
+    private ClassTime classTime;
 }
