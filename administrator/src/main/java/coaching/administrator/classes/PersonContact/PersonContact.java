@@ -26,7 +26,8 @@ public class PersonContact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional =
+    true)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
     private String contactType;

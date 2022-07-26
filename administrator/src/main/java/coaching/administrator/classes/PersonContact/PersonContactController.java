@@ -16,14 +16,16 @@ public class PersonContactController {
     @Autowired
     private PersonContactService service;
 
-    @PostMapping("/add-personContact")
-    public List<PersonContact> addPersonContact(@RequestBody List<PersonContact> personContacts) {
-        System.out.println("\033[31minside add personContact\033[0m");
+    // @PostMapping("/add-personContact")
+    // public List<PersonContact> addPersonContact(@RequestBody List<PersonContact>
+    // personContacts) {
+    // System.out.println("\033[31minside add personContact\033[0m");
 
-        for (PersonContact personContact : personContacts)
-            service.savePersonContact(personContact);
-        return service.getPersonContactByPersonId(personContacts.get(0).getPerson().getId());
-    }
+    // for (PersonContact personContact : personContacts)
+    // service.savePersonContact(personContact);
+    // return
+    // service.getPersonContactByPersonId(personContacts.get(0).getPerson().getId());
+    // }
 
     @GetMapping("/get-personContact-by-id/{id}")
     public PersonContact getPersonContactById(@PathVariable Integer id) {
