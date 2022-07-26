@@ -1,7 +1,6 @@
-package coaching.administrator.classes.StudentBatch;
+package coaching.administrator.classes.Result;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,10 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import coaching.administrator.classes.Batch.Batch;
+import coaching.administrator.classes.Exam.Exam;
 import coaching.administrator.classes.Student.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,24 +22,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "student_batch")
-public class StudentBatch implements Serializable {
+@Table(name = "result")
+public class Result implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
-
-    // @Temporal(TemporalType.TIMESTAMP)
-    // private Date endDate;
+    private Float mark;
 
     @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "batch_id", referencedColumnName = "id")
-    private Batch batch;
+    @JoinColumn(name = "exam_mark_id", referencedColumnName = "id")
+    private Exam exam;
 
     @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id", referencedColumnName = "person_id")
     private Student student;
+
+    // @OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL, mappedBy
+    // = "thana")
+    // private List<Thana> thanas;
+
 }

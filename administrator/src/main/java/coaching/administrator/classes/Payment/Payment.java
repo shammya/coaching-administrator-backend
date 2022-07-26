@@ -1,4 +1,4 @@
-package coaching.administrator.classes.StudentBatch;
+package coaching.administrator.classes.Payment;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import coaching.administrator.classes.Batch.Batch;
+import coaching.administrator.classes.Admin.Admin;
 import coaching.administrator.classes.Student.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,24 +25,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "student_batch")
-public class StudentBatch implements Serializable {
+@Table(name = "payment")
+public class Payment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
+    private Date time;
 
-    // @Temporal(TemporalType.TIMESTAMP)
-    // private Date endDate;
-
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "batch_id", referencedColumnName = "id")
-    private Batch batch;
 
     @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id", referencedColumnName = "person_id")
     private Student student;
+
+    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "received_by", referencedColumnName = "person_id")
+    private Admin receivedBy;
 }

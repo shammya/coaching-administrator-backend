@@ -1,6 +1,5 @@
-package coaching.administrator.classes.StudentBatch;
+package coaching.administrator.classes.FeesStudent;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -15,34 +14,34 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import coaching.administrator.classes.Batch.Batch;
+import coaching.administrator.classes.Fees.Fees;
 import coaching.administrator.classes.Student.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-@Table(name = "student_batch")
-public class StudentBatch implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "fees_history")
+public class FeesStudent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "fees_id", referencedColumnName = "id")
+    private Fees fees;
 
-    // @Temporal(TemporalType.TIMESTAMP)
-    // private Date endDate;
-
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "batch_id", referencedColumnName = "id")
-    private Batch batch;
-
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "student_id", referencedColumnName = "person_id")
     private Student student;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
+
+    private Float amount;
+
 }
