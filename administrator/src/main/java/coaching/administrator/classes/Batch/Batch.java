@@ -3,7 +3,6 @@ package coaching.administrator.classes.Batch;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,8 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import coaching.administrator.classes.ClassTime.ClassTime;
 import coaching.administrator.classes.Program.Program;
 import coaching.administrator.classes.Subject.Subject;
 import lombok.AllArgsConstructor;
@@ -32,12 +35,17 @@ public class Batch implements Serializable {
     private String name;
     private Integer monthlyFees;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id", referencedColumnName = "id")
     private Program program;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
+
+    @OneToMany(mappedBy = "batch", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonManagedReference
+    // @JoinColumn(name = "batch_id", referencedColumnName = "id")
+    private List<ClassTime> classTimes;
 
 }

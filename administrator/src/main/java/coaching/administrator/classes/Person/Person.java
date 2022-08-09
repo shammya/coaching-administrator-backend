@@ -2,10 +2,8 @@ package coaching.administrator.classes.Person;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,7 +19,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.FetchMode;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.Type;
 
 import coaching.administrator.classes.Address.Address;
@@ -47,23 +48,28 @@ public class Person implements Serializable {
     private Integer id;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
+    @OneToOne(fetch = FetchType.EAGER, optional = true)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "permanent_adrs_id", referencedColumnName = "id")
     private Address permanentAddress;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
+    @OneToOne(fetch = FetchType.EAGER, optional = true)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "present_adrs_id", referencedColumnName = "id")
     private Address presentAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "father_ocptn_id", referencedColumnName = "id")
     private Occupation fatherOccupation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "mother_ocptn_id", referencedColumnName = "id")
     private Occupation motherOccupation;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "religion_id", referencedColumnName = "id")
     private Religion religion;
 
@@ -71,15 +77,18 @@ public class Person implements Serializable {
     @JoinColumn(name = "coaching_id", referencedColumnName = "id")
     private Coaching coaching;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
-    private List<EduQualification> eduQualifications;
+    private Set<EduQualification> eduQualifications;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
-    private List<PersonContact> contacts;
+    private Set<PersonContact> contacts;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
+    @OneToOne(fetch = FetchType.EAGER, optional = true)
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "current_qualification_id", referencedColumnName = "id")
     private EduQualification currentQualification;
 
@@ -89,11 +98,14 @@ public class Person implements Serializable {
     private String email;
     private String fatherName;
     private String motherName;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfBirth;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date joiningDate;
     private String bloodGroup;
+
     private String nationality;
     private String personType;
     @Type(type = "org.hibernate.type.BinaryType")
