@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import coaching.administrator.classes.Coaching.Coaching;
 import coaching.administrator.classes.Coaching.CoachingService;
 import coaching.administrator.classes.Global.Global;
+import coaching.administrator.classes.Security.jwt.JwtUtils;
 
 @RestController
 public class ProgramController {
@@ -30,7 +31,7 @@ public class ProgramController {
 
     @PostMapping("/add-program")
     public ObjectNode addProgram(@RequestBody Program program) {
-        Coaching coaching = coachingService.getCoachingById(Global.coachingId);
+        Coaching coaching = coachingService.getCoachingById(JwtUtils.getCoachingId());
         // Coaching coaching = new CoachingService().getCoachingbyId(1);
         Global.colorPrint(coaching);
         program.setCoaching(coaching);
@@ -38,8 +39,17 @@ public class ProgramController {
     }
 
     @GetMapping("/get-program-by-id/{id}")
-    public Program getProgramById(@PathVariable Integer id) {
-        return service.getProgramById(id);
+    public ObjectNode getProgramById(@PathVariable Integer id) {
+        Program program = service.getProgramById(id);
+        if (program == null) {
+            return Global.createErrorMessage("Program not found");
+        }
+        if (program.getCoaching().getId() == JwtUtils.getCoachingId()) {
+            return Global.createSuccessMessage("Program found")
+                    .putPOJO("object", program);
+        } else {
+            return Global.createErrorMessage("You are not eligible to fetch this program");
+        }
     }
 
     // @GetMapping("/get-program-by-name/{name}")
@@ -49,7 +59,7 @@ public class ProgramController {
 
     @GetMapping("/get-all-program")
     public List<Program> getAllProgram() {
-        return repository.findByCoachingId(Global.coachingId);
+        return repository.findByCoachingId(JwtUtils.getCoachingId());
     }
 
     @PutMapping("/update-program")
