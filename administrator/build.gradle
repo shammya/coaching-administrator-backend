@@ -41,14 +41,13 @@ tasks.named('test') {
 }
 
 
-jar {
-	enabled = false
-  manifest {
-    attributes(
-      'Main-Class': 'coaching.administrator.AdministratorApplication'
-    )
-  }
-}
+// jar {
+//   manifest {
+//     attributes(
+//       'Main-Class': 'coaching.administrator.AdministratorApplication'
+//     )
+//   }
+// }
 
 task stage(type: Copy, dependsOn: [clean, build]) {
     from jar.archivePath
@@ -59,9 +58,9 @@ task stage(type: Copy, dependsOn: [clean, build]) {
 }
 stage.mustRunAfter(clean)
 
-// clean << {
-//     project.file('app.jar').delete()
-// }
+clean << {
+    project.file('app.jar').delete()
+}
 
 
 
