@@ -40,15 +40,26 @@ tasks.named('test') {
 }
 
 
-// Add these START
-bootJar {
-    archiveClassifier.set('boot')
-}
+// // Add these START
+// bootJar {
+//     archiveClassifier.set('boot')
+// }
 
-jar {
-    archiveClassifier.set('')
-} 
+// jar {
+//     archiveClassifier.set('')
+// } 
 
+// task stage(type: Copy, dependsOn: [clean, build]) {
+//     from jar.archivePath
+//     into project.rootDir 
+//     rename {
+//         'app.jar'
+//     }
+// }
+
+// clean << {
+//     project.file('app.jar').delete()
+// }
 
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
@@ -59,6 +70,8 @@ gradle.taskGraph.whenReady {
       test.enabled = false
     }
 }
+
+
 // clean << {
 //     project.file('app.jar').delete()
 // }
