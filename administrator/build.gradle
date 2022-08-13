@@ -3,7 +3,6 @@ plugins {
 	id 'org.springframework.boot' version '2.7.2-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id 'application'
 }
 
 group = 'coaching'
@@ -27,6 +26,7 @@ dependencies {
 	implementation 'org.slf4j:slf4j-api:1.7.6'
 	implementation 'javax.activation:activation:1.1.1'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'com.github.jsimone:webapp-runner:9.0.27.1'
 	//implementation 'org.hibernate:hibernate-entitymanager:4.3.8.Final'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -41,26 +41,30 @@ tasks.named('test') {
 }
 
 
-// jar {
-//   manifest {
-//     attributes(
-//       'Main-Class': 'coaching.administrator.AdministratorApplication'
-//     )
-//   }
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'coaching.administrator.AdministratorApplication'
+    )
+  }
+}
+
+
+
+// clean << {
+//     project.file('app.jar').delete()
 // }
 
-task stage(type: Copy, dependsOn: [clean, build]) {
-    from jar.archivePath
-    into project.rootDir
-    rename {
-        'app.jar'
-    }
-}
-stage.mustRunAfter(clean)
+// task stage(type: Copy, dependsOn: [clean, build]) {
+//     from jar.archivePath
+//     into project.rootDir
+//     rename {
+//         'app.jar'
+//     }
+// }
+// stage.mustRunAfter(clean)
 
-clean << {
-    project.file('app.jar').delete()
-}
+
 
 
 
