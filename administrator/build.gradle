@@ -4,6 +4,12 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
+apply plugin: 'io.spring.dependency-management'
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
 
 group = 'coaching'
 version = '0.0.1-SNAPSHOT'
@@ -39,6 +45,22 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+// springBoot {
+
+//     mainClassName = 'coaching.administrator.AdministratorApplication'
+// }
+
+jar {
+
+    enabled = true
+    baseName = 'coaching-admin'
+    version =  '0.0.1-SNAPSHOT'
+
+}
+bootJar {
+    classifier = 'boot'
+}
+
 
 // // Add these START
 // bootJar {
@@ -64,12 +86,12 @@ tasks.named('test') {
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
-gradle.taskGraph.whenReady {
-  taskGraph ->
-    if (taskGraph.hasTask(stage)) {
-      test.enabled = false
-    }
-}
+// gradle.taskGraph.whenReady {
+//   taskGraph ->
+//     if (taskGraph.hasTask(stage)) {
+//       test.enabled = false
+//     }
+// }
 
 
 // clean << {
