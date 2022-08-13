@@ -41,16 +41,24 @@ tasks.named('test') {
 }
 
 
-jar {
-  manifest {
-    attributes(
-      'Main-Class': 'coaching.administrator.AdministratorApplication'
-    )
-  }
+// jar {
+//   manifest {
+//     attributes(
+//       'Main-Class': 'coaching.administrator.AdministratorApplication'
+//     )
+//   }
+// }
+
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
+gradle.taskGraph.whenReady {
+  taskGraph ->
+    if (taskGraph.hasTask(stage)) {
+      test.enabled = false
+    }
 }
-
-
-
 // clean << {
 //     project.file('app.jar').delete()
 // }
