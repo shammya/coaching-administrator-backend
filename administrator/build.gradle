@@ -1,5 +1,4 @@
 
-
 plugins {
 	id 'org.springframework.boot' version '2.7.2-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -41,6 +40,7 @@ tasks.named('test') {
 }
 
 
+
 task stage(type: Copy, dependsOn: [clean, build]) {
     from jar.archivePath
     into project.rootDir
@@ -49,6 +49,15 @@ task stage(type: Copy, dependsOn: [clean, build]) {
     }
 }
 stage.mustRunAfter(clean)
+
+
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'coaching.administrator.AdministratorApplication'
+    )
+  }
+}
 
 // clean << {
 //     project.file('app.jar').delete()
