@@ -5,7 +5,7 @@ plugins {
 	id 'java'
 }
 
-group = 'coaching'
+group = 'coaching.administrator'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -26,7 +26,6 @@ dependencies {
 	implementation 'org.slf4j:slf4j-api:1.7.6'
 	implementation 'javax.activation:activation:1.1.1'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'com.github.jsimone:webapp-runner:9.0.27.1'
 	//implementation 'org.hibernate:hibernate-entitymanager:4.3.8.Final'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -41,13 +40,14 @@ tasks.named('test') {
 }
 
 
-// jar {
-//   manifest {
-//     attributes(
-//       'Main-Class': 'coaching.administrator.AdministratorApplication'
-//     )
-//   }
-// }
+// Add these START
+bootJar {
+    archiveClassifier.set('boot')
+}
+
+jar {
+    archiveClassifier.set('')
+} 
 
 
 task stage(dependsOn: ['build', 'clean'])
